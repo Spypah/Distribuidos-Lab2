@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  continente:
+    build: .
+    command: ["go", "run", "continente/main.go"]
+    volumes:
+      - ./:/app
+
+  oms:
+    build: .
+    ports:
+      - "8080:8080"
+    command: ["go", "run", "oms/main.go"]
+    volumes:
+      - ./:/app
+    
+  datanode:
+    build: .
+    ports:
+      - "8081:8081"
+    command: ["go", "run", "datanode/main.go"]
+    volumes:
+      - ./:/app
+
+  onu:
+    build: .
+    entrypoint: ["go", "run", "onu/main.go"]
+    tty: true
+    stdin_open: true
+    # entrypoint: ["./b/oms"]
+    volumes:
+      - ./:/app
+    # environment:
+    #   DOCKER_ON_RUN: "go run onu/main.go"
+

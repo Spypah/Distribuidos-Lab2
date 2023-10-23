@@ -1,0 +1,4 @@
+#! /bin/bash
+
+make docker-datanode
+make docker-continentes

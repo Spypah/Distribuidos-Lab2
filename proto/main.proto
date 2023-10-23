@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package grpc;
+
+option go_package = "./proto";
+
+service Greeter {
+  // Continente -> OMS
+  rpc NotificarPersona(EstadoPersona) returns (Ok) {}
+
+  // OMS -> DataNode
+  rpc GuardarNombre(Persona) returns (Ok) {}
+
+  // OMS -> Datanode
+  rpc ObtenerNombre(IdPersona) returns (NombrePersona) {}
+
+  // ONU -> OMS
+  rpc ObtenerLista(Estado) returns (ListaPersonas) {}
+}
+
+message EstadoPersona {
+  string nombre = 1;
+  string apellido = 2;
+  string estado = 3;
+}
+
+message Estado {
+  string estado = 1;
+}
+
+message IdPersona {
+  int64 id = 1;
+}
+
+message ListaPersonas {
+  repeated NombrePersona personas = 1; // ojito aqui
+}
+
+message Persona {
+  string nombre = 1;
+  string apellido = 2;
+  int64 id = 3;
+}
+
+message NombrePersona {
+  string nombre = 1;
+  string apellido = 2;
+}
+
+message Ok {
+  bool ok = 1;
+}
