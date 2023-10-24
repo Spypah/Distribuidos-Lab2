@@ -19,9 +19,9 @@ var lastId int64 = 0
 
 const (
 	//"dist002.inf.santiago.usm.cl:8081"
-	dataNode1IP = "192.168.10.232:8081"
+	dataNode1IP = "dist002.inf.santiago.usm.cl:8081"
 	//"dist003.inf.santiago.usm.cl:8081"
-	dataNode2IP = "192.168.10.233:8081"
+	dataNode2IP = "dist003.inf.santiago.usm.cl:8081"
 )
 
 func ListenGrpcServer() {

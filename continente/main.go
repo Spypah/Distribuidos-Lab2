@@ -16,13 +16,9 @@ import (
 	grpc "google.golang.org/grpc"
 )
 
-type server struct {
-	pb.UnimplementedGreeterServer
-}
-
 const (
 	// "dist001.inf.santiago.usm.cl:8081"
-	omsIP = "192.168.10.231:8080"
+	omsIP = "dist001.inf.santiago.usm.cl:8080"
 )
 
 func connectToServer(serverAddress string) pb.GreeterClient {
