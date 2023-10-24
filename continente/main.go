@@ -135,8 +135,8 @@ func main() {
 
 	for len >= 0 {
 		if len <= maxLines-5 {
-			log.Println("Esperando 1 segundo para enviar más personas")
-			time.Sleep(1 * time.Second)
+			log.Println("Esperando 3 segundo para enviar más personas")
+			time.Sleep(3 * time.Second)
 		}
 
 		name, state := getPerson()
