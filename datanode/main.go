@@ -33,7 +33,7 @@ type server struct {
 }
 
 func (s *server) GuardarNombre(ctx context.Context, message *pb.Persona) (*pb.Ok, error) {
-	log.Println("Persona recibida: " + fmt.Sprint(message.GetNombre()))
+	// log.Println("Persona recibida: " + fmt.Sprint(message.GetNombre()))
 
 	line := fmt.Sprintf("%s;%s;%s",
 		strconv.Itoa(int(message.GetId())),
@@ -53,7 +53,7 @@ func (s *server) GuardarNombre(ctx context.Context, message *pb.Persona) (*pb.Ok
 }
 
 func (s *server) ObtenerNombre(ctx context.Context, message *pb.IdPersona) (*pb.NombrePersona, error) {
-	log.Println("Id recibido " + fmt.Sprint(message.GetId()))
+	// log.Println("Id recibido " + fmt.Sprint(message.GetId()))
 
 	fd, err := os.Open("datanode/DATA.txt")
 	failOnError(err, "Failed to open file")
@@ -74,6 +74,11 @@ func (s *server) ObtenerNombre(ctx context.Context, message *pb.IdPersona) (*pb.
 		failOnError(err, "Failed to convert id to int")
 
 		if id == int(message.GetId()) {
+			log.Printf("Solicitud de NameNode recibida, mensaje enviado: %s %s \n",
+				fields[1],
+				strings.ReplaceAll(fields[2], "\n", ""),
+			)
+
 			return &pb.NombrePersona{
 				Nombre:   fields[1],
 				Apellido: strings.ReplaceAll(fields[2], "\n", ""),
@@ -81,7 +86,7 @@ func (s *server) ObtenerNombre(ctx context.Context, message *pb.IdPersona) (*pb.
 		}
 	}
 
-	log.Printf("No se encontró el id %d", message.GetId())
+	// log.Printf("No se encontró el id %d", message.GetId())
 
 	return &pb.NombrePersona{
 		Nombre:   "",

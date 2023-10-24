@@ -18,10 +18,11 @@ import (
 var lastId int64 = 0
 
 const (
-	//"dist002.inf.santiago.usm.cl:8081"
 	dataNode1IP = "dist002.inf.santiago.usm.cl:8081"
-	//"dist003.inf.santiago.usm.cl:8081"
 	dataNode2IP = "dist003.inf.santiago.usm.cl:8081"
+
+	//dataNode1IP = "192.168.10.232:8081"
+	//dataNode2IP = "192.168.10.233:8081"
 )
 
 func ListenGrpcServer() {
@@ -39,7 +40,7 @@ func ListenGrpcServer() {
 }
 
 func connectToServer(serverAddress string) pb.GreeterClient {
-	log.Println("Conectando a " + serverAddress)
+	// log.println("Conectando a " + serverAddress)
 
 	conn, err := grpc.Dial(serverAddress, grpc.WithInsecure(), grpc.FailOnNonTempDialError(true), grpc.WithBlock())
 
@@ -49,7 +50,7 @@ func connectToServer(serverAddress string) pb.GreeterClient {
 		conn, err = grpc.Dial(serverAddress, grpc.WithInsecure(), grpc.FailOnNonTempDialError(true), grpc.WithBlock())
 	}
 
-	log.Println("Conexión establecida a" + serverAddress)
+	// log.println("Conexión establecida a" + serverAddress)
 
 	client := pb.NewGreeterClient(conn)
 
@@ -61,7 +62,7 @@ type server struct {
 }
 
 func (s *server) NotificarPersona(ctx context.Context, message *pb.EstadoPersona) (*pb.Ok, error) {
-	log.Println("Persona recibida: " + fmt.Sprint(message.GetNombre()))
+	// log.Println("Persona recibida: " + fmt.Sprint(message.GetNombre())) // EST
 
 	lastId += 1
 
@@ -105,7 +106,7 @@ func (s *server) NotificarPersona(ctx context.Context, message *pb.EstadoPersona
 }
 
 func (s *server) ObtenerLista(ctx context.Context, message *pb.Estado) (*pb.ListaPersonas, error) {
-	log.Println("Query recibida" + fmt.Sprint(message.GetEstado()))
+	// log.Println("Query recibida" + fmt.Sprint(message.GetEstado()))
 
 	fd, err := os.Open("oms/DATA.txt")
 	failOnError(err, "Failed to open file")
@@ -150,6 +151,11 @@ func (s *server) ObtenerLista(ctx context.Context, message *pb.Estado) (*pb.List
 		}
 	}
 
+	log.Printf("Solicitud de %s recibida, mensaje enviado: %s \n",
+		message.GetEstado(),
+		fmt.Sprint(peopleList),
+	)
+
 	return &pb.ListaPersonas{
 		Personas: peopleList,
 	}, nil
@@ -158,11 +164,11 @@ func (s *server) ObtenerLista(ctx context.Context, message *pb.Estado) (*pb.List
 func guardarNombre(serverAddress string, message *pb.Persona) bool {
 	client := connectToServer(serverAddress)
 	response, err := client.GuardarNombre(context.Background(), message)
-	log.Println("Mensaje enviado a " + serverAddress)
+	// log.Println("Mensaje enviado a " + serverAddress)
 
 	failOnError(err, "Failed to send message")
 
-	log.Println("Respuesta desde " + serverAddress + ": " + fmt.Sprint(response.GetOk()))
+	// log.Println("Respuesta desde " + serverAddress + ": " + fmt.Sprint(response.GetOk()))
 
 	return response.GetOk()
 }
@@ -170,11 +176,11 @@ func guardarNombre(serverAddress string, message *pb.Persona) bool {
 func obtenerNombre(serverAddress string, message *pb.IdPersona) *pb.NombrePersona {
 	client := connectToServer(serverAddress)
 	response, err := client.ObtenerNombre(context.Background(), message)
-	log.Println("Mensaje enviado a " + serverAddress)
+	// log.Println("Mensaje enviado a " + serverAddress)
 
 	failOnError(err, "Failed to send message")
 
-	log.Println("Respuesta desde " + serverAddress + ": " + fmt.Sprint(response.GetNombre()))
+	// log.Println("Respuesta desde " + serverAddress + ": " + fmt.Sprint(response.GetNombre()))
 
 	return response
 }

@@ -17,12 +17,12 @@ import (
 )
 
 const (
-	// "dist001.inf.santiago.usm.cl:8081"
 	omsIP = "dist001.inf.santiago.usm.cl:8080"
+	//omsIP = "192.168.10.231:8080"
 )
 
 func connectToServer(serverAddress string) pb.GreeterClient {
-	log.Println("Conectando a " + serverAddress)
+	// log.println("Conectando a " + serverAddress)
 
 	conn, err := grpc.Dial(serverAddress, grpc.WithInsecure(), grpc.FailOnNonTempDialError(true), grpc.WithBlock())
 
@@ -32,7 +32,7 @@ func connectToServer(serverAddress string) pb.GreeterClient {
 		conn, err = grpc.Dial(serverAddress, grpc.WithInsecure(), grpc.FailOnNonTempDialError(true), grpc.WithBlock())
 	}
 
-	log.Println("Conexión establecida a" + serverAddress)
+	// log.println("Conexión establecida a" + serverAddress)
 
 	client := pb.NewGreeterClient(conn)
 
@@ -42,11 +42,11 @@ func connectToServer(serverAddress string) pb.GreeterClient {
 func notificarPersona(serverAddress string, message *pb.EstadoPersona) bool {
 	client := connectToServer(serverAddress)
 	response, err := client.NotificarPersona(context.Background(), message)
-	log.Println("Mensaje enviado a " + serverAddress)
+	// log.Println("Mensaje enviado a " + serverAddress)
 
 	failOnError(err, "Failed to send message")
 
-	log.Println("Respuesta desde " + serverAddress + ": " + fmt.Sprint(response.GetOk()))
+	// log.Println("Respuesta desde " + serverAddress + ": " + fmt.Sprint(response.GetOk()))
 
 	return response.GetOk()
 }
@@ -112,7 +112,7 @@ func getPerson() (string, string) {
 
 	var state string
 
-	if randomNumber <= 45 {
+	if randomNumber <= 55 {
 		state = "infectado"
 	} else if randomNumber <= 100 {
 		state = "muerto"
